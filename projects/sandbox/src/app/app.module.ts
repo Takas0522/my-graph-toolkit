@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { MyGraphToolkitLibModule } from '../../../my-graph-toolkit-lib/src/lib/my-graph-toolkit-lib.module';
 
 import { AppComponent } from './app.component';
 
@@ -8,7 +9,8 @@ import { AppComponent } from './app.component';
     AppComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    MyGraphToolkitLibModule
   ],
   providers: [],
   bootstrap: [AppComponent]
