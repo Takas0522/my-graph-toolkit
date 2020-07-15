@@ -10,7 +10,7 @@ export class MsalSettingsComponent {
 
   constructor(
     private msalService: MsalService
-  ) { }
+  ) {}
 
   @Input()
   set msalSettings(conf: {config: Configuration, scopes: string[]}) {
