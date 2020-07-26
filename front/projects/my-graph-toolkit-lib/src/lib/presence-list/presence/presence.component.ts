@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserPresence } from '../../models/user-presence';
+import { SubscriptionService } from '../../subscription/subscription.service';
 
 @Component({
   selector: 'mygtk-presence',
@@ -11,9 +12,15 @@ export class PresenceComponent implements OnInit {
   @Input()
   data!: UserPresence;
 
-  constructor() { }
+  constructor(
+    private subscriotionService: SubscriptionService
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  setSubscription(): void {
+    this.subscriotionService.setSubscriotion(this.data.id);
   }
 
 }

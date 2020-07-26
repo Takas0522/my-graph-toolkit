@@ -25,7 +25,6 @@ export class MsalService {
       console.log({handleCallback: err});
       console.log({handleCallback: res});
     });
-    console.log('next')
     this._isCompleteSettingState.next(true);
   }
 

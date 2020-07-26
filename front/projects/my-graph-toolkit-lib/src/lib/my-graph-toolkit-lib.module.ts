@@ -6,6 +6,9 @@ import { PresenceComponent } from './presence-list/presence/presence.component';
 import { MaterialModule } from './material.module';
 import { CommonModule } from '@angular/common';
 import { PresenceListService } from './presence-list/presence-list.service';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SubscriptionService } from './subscription/subscription.service';
 
 @NgModule({
   declarations: [
@@ -15,11 +18,14 @@ import { PresenceListService } from './presence-list/presence-list.service';
   ],
   imports: [
     MaterialModule,
-    CommonModule
+    CommonModule,
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [
     MsalService,
-    PresenceListService
+    PresenceListService,
+    SubscriptionService
   ],
   exports: [
     MsalSettingsComponent,

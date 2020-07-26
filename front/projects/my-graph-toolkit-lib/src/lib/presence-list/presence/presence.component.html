@@ -1,0 +1,23 @@
+<div class="contents">
+    <mat-card>
+        <div class="person-status">
+            <div class="status">
+                <mat-icon color="warn"
+                    matTooltip="{{data.outputActivity}}">
+                    remove_circle
+                </mat-icon>
+                {{data.name}}
+            </div>
+            <div class="subs-button">
+                <button mat-flat-button color="primary"
+                    (click)="setSubscription()"
+                    [disabled]="data.subscriptionExpirationDateTime !== null">
+                    監視する
+                </button>
+            </div>
+            <div *ngIf="data.subscriptionExpirationDateTime !== null" class="status info">
+                監視期間: {{data.subscriptionExpirationDateTime | date: 'yyyy/MM/dd HH:mm:ss'}}迄…
+            </div>
+        </div>
+    </mat-card>
+</div>
