@@ -11,6 +11,7 @@ export class PresenceComponent implements OnInit {
 
   @Input()
   data!: UserPresence;
+  isPostData = false;
 
   constructor(
     private subscriotionService: SubscriptionService
@@ -20,6 +21,11 @@ export class PresenceComponent implements OnInit {
   }
 
   setSubscription(): void {
+    this.subscriotionService.makePostSubscription();
+    this.subscriotionService.post.subscribe(_ => {
+      this.isPostData = false;
+    });
+    this.isPostData = true;
     this.subscriotionService.setSubscriotion(this.data.id);
   }
 

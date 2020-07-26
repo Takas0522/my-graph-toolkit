@@ -11,11 +11,11 @@
             <div class="subs-button">
                 <button mat-flat-button color="primary"
                     (click)="setSubscription()"
-                    [disabled]="data.subscriptionExpirationDateTime !== null">
+                    [disabled]="data.subscriptionExpirationDateTime !== null || isPostData">
                     監視する
                 </button>
             </div>
-            <div *ngIf="data.subscriptionExpirationDateTime !== null" class="status info">
+            <div *ngIf="data.subscriptionExpirationDateTime !== null " class="status info">
                 監視期間: {{data.subscriptionExpirationDateTime | date: 'yyyy/MM/dd HH:mm:ss'}}迄…
             </div>
         </div>
