@@ -1,13 +1,18 @@
 export class UserPresence {
     id: string;
     name: string;
-    availability: string;
+    availability: 'Available' | 'AvailableIdle' | 'Away' | 'BeRightBack' | 'Busy' | 'BusyIdle' | 'DoNotDisturb' | 'Offline' | 'PresenceUnknown';
     outputAvailability: string;
-    activity: string;
+    activity: 'Available'|'Away'|'BeRightBack'|'Busy'|'DoNotDisturb'|'InACall'|'InAConferenceCall'|'Inactive'|'InAMeeting'|'Offline'|'OffWork'|'OutOfOffice'|'PresenceUnknown'|'Presenting'|'UrgentInterruptionsOnly';
     outputActivity: string;
     subscriptionExpirationDateTime: Date | null = null;
 
-    constructor(data: { id: string, name: string, availability: string, activity: string}) {
+    constructor(data: {
+        id: string,
+        name: string,
+        availability: 'Available' | 'AvailableIdle' | 'Away' | 'BeRightBack' | 'Busy' | 'BusyIdle' | 'DoNotDisturb' | 'Offline' | 'PresenceUnknown',
+        activity: 'Available'|'Away'|'BeRightBack'|'Busy'|'DoNotDisturb'|'InACall'|'InAConferenceCall'|'Inactive'|'InAMeeting'|'Offline'|'OffWork'|'OutOfOffice'|'PresenceUnknown'|'Presenting'|'UrgentInterruptionsOnly'
+    }) {
         this.id = data.id;
         this.name = data.name;
         this.availability = data.availability;
@@ -16,59 +21,59 @@ export class UserPresence {
         this.outputActivity = this.genOutputActivity();
     }
 
-    private genOutputAvailability(): string {
-        switch (this.availability.toLowerCase()) {
-            case 'availableidle':
+    genOutputAvailability(): string {
+        switch (this.availability) {
+            case 'Available':
                 return '連絡可能';
-            case 'away':
+            case 'Away':
                 return '退席中';
-            case 'berightback':
+            case 'BeRightBack':
                 return 'すぐ戻ってくる';
-            case 'busy':
+            case 'Busy':
                 return '取り込み中';
-            case 'busyidle':
+            case 'BusyIdle':
                 return '取り込み中';
-            case 'donotdisturb':
+            case 'DoNotDisturb':
                 return '応答不可';
-            case 'offline':
+            case 'Offline':
                 return 'オフライン';
-            case 'presenceunknown':
+            case 'PresenceUnknown':
                 return '不明';
         }
         return '不明';
     }
 
-    private genOutputActivity(): string {
-        switch (this.activity.toLowerCase()) {
-            case 'available':
+    genOutputActivity(): string {
+        switch (this.activity) {
+            case 'Available':
                 return '連絡可能';
-            case 'away':
+            case 'Away':
                 return '退席中';
-            case 'berightback':
+            case 'BeRightBack':
                 return 'すぐ戻ってくる';
-            case 'busy':
+            case 'Busy':
                 return '取り込み中';
-            case 'donotdisturb':
+            case 'DoNotDisturb':
                 return '超取り込み中';
-            case 'inacall':
+            case 'InACall':
                 return '通話中';
-            case 'inaconferencecall':
+            case 'InAConferenceCall':
                 return '電話会議中';
-            case 'inactive':
+            case 'Inactive':
                 return 'Off';
-            case 'inameeting':
+            case 'InAMeeting':
                 return 'ミーティング中';
-            case 'offline':
+            case 'Offline':
                 return 'オフライン';
-            case 'offwork':
+            case 'OffWork':
                 return '仕事してない';
-            case 'outofoffice':
+            case 'OutOfOffice':
                 return '職場にいない';
-            case 'presenceunknown':
+            case 'PresenceUnknown':
                 return '不明';
-            case 'presenting':
+            case 'Presenting':
                 return '発表中';
-            case 'urgentinterruptionsonly':
+            case 'UrgentInterruptionsOnly':
                 return '緊急の中断のみ';
         }
         return '不明';

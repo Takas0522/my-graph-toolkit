@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserPresence } from '../../models/user-presence';
 import { SubscriptionService } from '../../subscription/subscription.service';
+import { SignalRService } from '../../singal-r/signal-r.service';
 
 @Component({
   selector: 'mygtk-presence',
@@ -14,13 +15,15 @@ export class PresenceComponent implements OnInit {
   isPostData = false;
 
   constructor(
-    private subscriotionService: SubscriptionService
+    private subscriotionService: SubscriptionService,
+    private signalRService: SignalRService
   ) { }
 
   ngOnInit(): void {
   }
 
   setSubscription(): void {
+    this.signalRService.setSignalRHub();
     this.subscriotionService.makePostSubscription();
     this.subscriotionService.post.subscribe(_ => {
       this.isPostData = false;

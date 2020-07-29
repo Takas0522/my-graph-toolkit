@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserPresence } from '../models/user-presence';
 import { PresenceListService } from './presence-list.service';
 import { SubscriptionService } from '../subscription/subscription.service';
+import { SignalRService } from '../singal-r/signal-r.service';
 
 @Component({
   selector: 'mygtk-presence-list',
@@ -14,12 +15,12 @@ export class PresenceListComponent implements OnInit {
 
   constructor(
     private service: PresenceListService,
-    private subscriptionService: SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private signalRService: SignalRService
   ) { }
 
   ngOnInit(): void {
     this.service.userPresence$.subscribe(s => {
-      console.log(s)
       this.datas = s;
     });
     this.service.getUserPresence();
@@ -27,6 +28,9 @@ export class PresenceListComponent implements OnInit {
       this.service.setSubscriptionSettings(x);
     });
     this.subscriptionService.getSubscription();
+    this.signalRService.signalRResponse$.subscribe(x => {
+      this.service.adjustSignalRResponse(x);
+    });
   }
 
 }

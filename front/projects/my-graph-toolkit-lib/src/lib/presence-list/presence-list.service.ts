@@ -7,6 +7,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 import { Presence } from '../models/presence';
 import { SubscriptionBody } from '../models/subscription';
+import { SignalRResponse } from '../singal-r/signal-r-response';
 
 @Injectable()
 export class PresenceListService {
@@ -90,5 +91,19 @@ export class PresenceListService {
             });
             this._userPresence.next(nowData);
         }
+    }
+
+    adjustSignalRResponse(datas: SignalRResponse[]): void {
+        const nowV = this._userPresence.value;
+        nowV.forEach(f => {
+            const userData = datas.filter(fi => fi.userId === f.id);
+            if (userData.length > 0) {
+                f.activity = userData[0].activity;
+                f.availability = userData[0].availability;
+                f.genOutputActivity();
+                f.genOutputAvailability();
+            }
+        });
+        this._userPresence.next(nowV);
     }
 }

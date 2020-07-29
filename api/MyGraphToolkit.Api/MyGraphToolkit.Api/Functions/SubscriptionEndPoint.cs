@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.WebJobs.Extensions.SignalRService;
 using Microsoft.Extensions.Logging;
 using MyGraphToolkit.Api.Models;
 using Newtonsoft.Json;
@@ -19,7 +20,9 @@ namespace MyGraphToolkit.Api.Functions
         [FunctionName("SubscriptionEndPoint")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+            ILogger log,
+            [SignalR(HubName = "broadcast")] IAsyncCollector<SignalRMessage> signalRMessages
+        )
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -47,8 +50,13 @@ namespace MyGraphToolkit.Api.Functions
                     };
                 });
                 log.LogInformation("res", res);
-            }
 
+                await signalRMessages.AddAsync(new SignalRMessage()
+                {
+                    Target = "notify",
+                    Arguments = new object[] { new { res } }
+                });
+            }
 
             return new OkObjectResult("run");
 
