@@ -26,6 +26,9 @@ export class PresenceListComponent implements OnInit {
     this.service.getUserPresence();
     this.subscriptionService.subscriptionData$.subscribe(x => {
       this.service.setSubscriptionSettings(x);
+      if (x.length > 0) {
+        this.signalRService.setSignalRHub();
+      }
     });
     this.subscriptionService.getSubscription();
     this.signalRService.signalRResponse$.subscribe(x => {

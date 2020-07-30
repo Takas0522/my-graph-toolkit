@@ -2,10 +2,11 @@ export class UserPresence {
     id: string;
     name: string;
     availability: 'Available' | 'AvailableIdle' | 'Away' | 'BeRightBack' | 'Busy' | 'BusyIdle' | 'DoNotDisturb' | 'Offline' | 'PresenceUnknown';
-    outputAvailability: string;
+    outputAvailability = '';
     activity: 'Available'|'Away'|'BeRightBack'|'Busy'|'DoNotDisturb'|'InACall'|'InAConferenceCall'|'Inactive'|'InAMeeting'|'Offline'|'OffWork'|'OutOfOffice'|'PresenceUnknown'|'Presenting'|'UrgentInterruptionsOnly';
-    outputActivity: string;
+    outputActivity = '';
     subscriptionExpirationDateTime: Date | null = null;
+    iconStatus: 'Available' | 'Away' | 'Offline' = 'Offline';
 
     constructor(data: {
         id: string,
@@ -17,11 +18,33 @@ export class UserPresence {
         this.name = data.name;
         this.availability = data.availability;
         this.activity = data.activity;
-        this.outputAvailability = this.genOutputAvailability();
-        this.outputActivity = this.genOutputActivity();
+        this.setAllStatus();
     }
 
-    genOutputAvailability(): string {
+    setAllStatus(): void {
+        this.outputAvailability = this.genOutputAvailability();
+        this.outputActivity = this.genOutputActivity();
+        this.iconStatus = this.setIconStatus();
+    }
+
+    private setIconStatus(): 'Available' | 'Away' | 'Offline' {
+        switch (this.availability) {
+            case 'Available':
+                return 'Available';
+            case 'Away':
+            case 'BeRightBack':
+            case 'Busy':
+            case 'BusyIdle':
+            case 'DoNotDisturb':
+                return 'Away';
+            case 'Offline':
+            case 'PresenceUnknown':
+                return 'Offline';
+        }
+        return 'Offline';
+    }
+
+    private genOutputAvailability(): string {
         switch (this.availability) {
             case 'Available':
                 return '連絡可能';
@@ -43,7 +66,7 @@ export class UserPresence {
         return '不明';
     }
 
-    genOutputActivity(): string {
+    private genOutputActivity(): string {
         switch (this.activity) {
             case 'Available':
                 return '連絡可能';

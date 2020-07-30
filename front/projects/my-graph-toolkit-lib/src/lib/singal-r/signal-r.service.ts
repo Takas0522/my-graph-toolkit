@@ -41,7 +41,7 @@ export class SignalRService {
 
     this.hubConnection.start().catch(err => console.error(err.toString()));
     this.hubConnection.on('notify', (datas: SignalRResponse[]) => {
-      console.log(datas);
+      console.log({hubConncetionSettings: datas});
       if (this.canAccessStatus(datas)) {
         alert('通信可能になったよ');
       }

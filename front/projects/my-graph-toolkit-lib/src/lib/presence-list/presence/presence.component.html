@@ -2,9 +2,20 @@
     <mat-card>
         <div class="person-status">
             <div class="status">
-                <mat-icon color="warn"
+                <mat-icon *ngIf="data.iconStatus==='Offline'"
+                    class="offline"
                     matTooltip="{{data.outputActivity}}">
                     remove_circle
+                </mat-icon>
+                <mat-icon *ngIf="data.iconStatus==='Away'"
+                    class="away"
+                    matTooltip="{{data.outputActivity}}">
+                    access_time
+                </mat-icon>
+                <mat-icon *ngIf="data.iconStatus==='Available'"
+                    class="available"
+                    matTooltip="{{data.outputActivity}}">
+                    check_circle
                 </mat-icon>
                 {{data.name}}
             </div>

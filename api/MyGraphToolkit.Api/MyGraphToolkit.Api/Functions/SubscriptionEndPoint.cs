@@ -50,11 +50,12 @@ namespace MyGraphToolkit.Api.Functions
                     };
                 });
                 log.LogInformation("res", res);
+                var presenceData =  res.Select(s => new { userId = s.UserId, activity = s.Activity, availability = s.Availability });
 
                 await signalRMessages.AddAsync(new SignalRMessage()
                 {
                     Target = "notify",
-                    Arguments = new object[] { new { res } }
+                    Arguments = new object[] { presenceData }
                 });
             }
 

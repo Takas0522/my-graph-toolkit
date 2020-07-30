@@ -100,8 +100,7 @@ export class PresenceListService {
             if (userData.length > 0) {
                 f.activity = userData[0].activity;
                 f.availability = userData[0].availability;
-                f.genOutputActivity();
-                f.genOutputAvailability();
+                f.setAllStatus();
             }
         });
         this._userPresence.next(nowV);

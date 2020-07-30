@@ -14,7 +14,7 @@ export class SubscriptionService {
   get subscriptionData$(): Observable<SubscriptionBody[]> {
     return this._subscriptionData.asObservable();
   }
-  private _post!: Subject<void>;;
+  private _post!: Subject<void>;
   get post(): Observable<void> {
     return this._post.asObservable();
   }
