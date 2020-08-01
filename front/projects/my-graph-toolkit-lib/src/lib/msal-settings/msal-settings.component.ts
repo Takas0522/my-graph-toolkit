@@ -4,7 +4,7 @@ import { Configuration, Account } from 'msal';
 
 @Component({
   selector: 'mygtk-msal-settings',
-  template: ''
+  template: 'a'
 })
 export class MsalSettingsComponent {
 
@@ -14,7 +14,12 @@ export class MsalSettingsComponent {
 
   @Input()
   set msalSettings(conf: {config: Configuration, scopes: string[]}) {
+    console.log({msalSettings: conf})
     this.msalService.init(conf.config, conf.scopes);
+  }
+  @Input()
+  set dummyStSet(val: string) {
+    console.log({dummySet: val})
   }
 
   account(): Account {

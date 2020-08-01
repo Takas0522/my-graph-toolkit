@@ -25,6 +25,11 @@ export class MsalService {
       console.log({handleCallback: err});
       console.log({handleCallback: res});
     });
+    console.log({init: config});
+    if (this.getAccount() === null) {
+      this.login();
+      return;
+    }
     this._isCompleteSettingState.next(true);
   }
 

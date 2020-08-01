@@ -7,7 +7,11 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build:elements:win": "ng build --prod --project custom-element --output-hashing none && npm run pack:elements:win && copy /b projects\\custom-element\\package.json dist\\custom-element\\package.json",
+    "build:elements:mac": "ng build --prod --project custom-element --output-hashing none && npm run pack:elements:mac && cp projects/custom-element/package.json dist/custom-element/package.json",
+    "pack:elements:win": "type .\\dist\\custom-element\\main.js, .\\dist\\custom-element\\polyfills.js, ,.\\dist\\custom-element\\runtime.js > dist\\custom-element\\custom-element.js",
+    "pack:elements:mac": "cat ./dist/custom-element/*.js > dist/custom-element/custom-element.js"
   },
   "private": true,
   "dependencies": {
@@ -16,6 +20,7 @@
     "@angular/common": "~10.0.3",
     "@angular/compiler": "~10.0.3",
     "@angular/core": "~10.0.3",
+    "@angular/elements": "^10.0.3",
     "@angular/forms": "~10.0.3",
     "@angular/material": "^10.0.1",
     "@angular/platform-browser": "~10.0.3",

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="../../dist/custom-element/styles.css">
+        <script src="../../dist/custom-element/scripts.js"></script>
+    </head>
+    <body>
+        <mygtk-presence-list></mygtk-presence-list>
+        <script type="text/javascript">
+            const cl = new LibSettings();
+            const setting = {
+                config: {
+                    auth: {
+                        clientId: 'e2e6a50b-ab91-4566-9aac-b17e9e12480b',
+                        authority: 'https://login.microsoftonline.com/8819a950-d174-4508-a86d-cddabbafb14a',
+                        redirectUri: 'http://localhost:5500/projects/plane-sandbox/index.html'
+                    }
+                },
+                scopes: ['User.Read.All', 'Presence.Read.All']
+            }
+            cl.setSettings(setting);
+        </script>
+        <script src="../../dist/custom-element/custom-element.js"></script>
+    </body>
+</html>

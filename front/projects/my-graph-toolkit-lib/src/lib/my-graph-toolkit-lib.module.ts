@@ -29,7 +29,8 @@ import { SubscriptionService } from './subscription/subscription.service';
   ],
   exports: [
     MsalSettingsComponent,
-    PresenceListComponent
+    PresenceListComponent,
+    PresenceComponent
   ]
 })
 export class MyGraphToolkitLibModule { }

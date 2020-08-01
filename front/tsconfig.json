@@ -21,6 +21,15 @@
     },
     {
       "path": "./projects/sandbox/e2e/tsconfig.json"
+    },
+    {
+      "path": "./projects/custom-element/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/custom-element/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/custom-element/e2e/tsconfig.json"
     }
 ]
 }
