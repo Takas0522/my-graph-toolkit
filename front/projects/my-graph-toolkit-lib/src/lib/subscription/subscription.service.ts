@@ -44,55 +44,95 @@ export class SubscriptionService {
     const header = new HttpHeaders().append('Authorization', `Bearer ${token}`);
     this.http.get<Subscription>(this.subscriptionEndPoint, { headers: header }).pipe(
       map((m: Subscription) => {
-        return this.adjustSubscription(m);
+        const d =  this.adjustSubscription(m);
+        return d;
       })
     ).subscribe(x => {
       this._subscriptionData.next(x);
     });
   }
 
+  private getTargetUserId(data: SubscriptionBody): string[] {
+    const resources = data.resource.split('/');
+    if (resources.length > 1) {
+      let userFilter = resources[2];
+      userFilter = userFilter.replace('presences?$filter=id in (', '').replace(')', '');
+      const users = userFilter.split(',');
+      return users.map(m => m.replace(`'`, '').replace(`'`, ''));
+    }
+    return [];
+  }
+
   private adjustSubscription(data: Subscription): SubscriptionBody[] {
     if (data.value.length < 1) {
       return [];
     }
-    const res: SubscriptionBody[] = data.value.map(vm => {
-      return this.genSubscriptionBody(vm);
+    const res: SubscriptionBody[] = [];
+    data.value.forEach(vm => {
+      const d = this.genSubscriptionBody(vm);
+      d.forEach(item => res.push(item));
     });
+    console.log({adjustSubscription: res})
     return res;
   }
 
-  private genSubscriptionBody(vm: SubscriptionBody): SubscriptionBody {
-    const resourceSplit = vm.resource.split('/');
-    let userId = '';
-    if (resourceSplit.length > 2) {
-      userId = resourceSplit[2];
-    }
-    return {
-      applicationId: vm.applicationId,
-      changeType: vm.changeType,
-      clientState: vm.clientState,
-      creatorId: vm.creatorId,
-      expirationDateTime: new Date(vm.expirationDateTime),
-      id: vm.id,
-      latestSupportedTlsVersion: vm.latestSupportedTlsVersion,
-      notificationUrl: vm.notificationUrl,
-      resource: vm.resource,
-      useiId: userId
-    };
+  private genSubscriptionBody(vm: SubscriptionBody): SubscriptionBody[] {
+    const users = this.getTargetUserId(vm);
+    return users.map(m => {
+      return {
+        applicationId: vm.applicationId,
+        changeType: vm.changeType,
+        clientState: vm.clientState,
+        creatorId: vm.creatorId,
+        expirationDateTime: new Date(vm.expirationDateTime),
+        id: vm.id,
+        latestSupportedTlsVersion: vm.latestSupportedTlsVersion,
+        notificationUrl: vm.notificationUrl,
+        resource: vm.resource,
+        useiId: m
+      };
+    });
   }
 
   makePostSubscription(): void {
     this._post = new Subject<void>();
   }
+
+  private async deleteSubscription(): Promise<void> {
+    const data = this._subscriptionData.value;
+    console.log({deleteSubscription: data})
+    const token = await this.msalService.aquireToken();
+    const header = new HttpHeaders().append('Authorization', `Bearer ${token}`);
+    if (data !== []) {
+      for (const item of data) {
+        await this.http.delete(`${this.subscriptionEndPoint}/${item.id}`, { headers: header }).toPromise();
+      }
+    }
+  }
+
+  private genFilterUserIds(userId: string): string {
+    const nowSubscrpitionIds = this._subscriptionData.value.map(m => m.useiId);
+    if (nowSubscrpitionIds.includes(userId)) {
+      return nowSubscrpitionIds.map(m => `'${m}'`).join(',');
+    }
+    if(nowSubscrpitionIds.length > 0) {
+      return nowSubscrpitionIds.map(m => `'${m}'`).join(',') + `,'${userId}'`;
+    }
+    return `'${userId}'`;
+  }
+
   async setSubscriotion(userId: string): Promise<void> {
+    await this.deleteSubscription();
+
     const expDate = new Date();
-    expDate.setHours(new Date().getHours() + 10);
+    expDate.setHours(new Date().getHours() + 71);
+    const genUserIds = this.genFilterUserIds(userId);
     const token = await this.msalService.aquireToken();
     const header = new HttpHeaders().append('Authorization', `Bearer ${token}`);
     const sendBody = {
       changeType: 'updated',
       notificationUrl: 'https://okawa-sample-subscription.azurewebsites.net/api/SubscriptionEndPoint?code=5OVO4Sd6AirOg21Kh1R2j3NlXkZAm9AFCHbU5knKuNjHSZGk7UrXDw==',
-      resource: `communications/presences/${userId}`,
+      resource: `/communications/presences?$filter=id in (${genUserIds})`,
       expirationDateTime: expDate.toJSON()
     };
     this.http.post<SubscriptionPostResponse>(this.subscriptionEndPoint, sendBody, { headers: header }).pipe(
